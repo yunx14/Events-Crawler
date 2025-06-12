@@ -1,0 +1,14 @@
+name: CI
+on:                     # 1️⃣ When to run
+  push:
+    branches: [main]
+jobs:
+  test:                 # 2️⃣ A job label
+    runs-on: ubuntu-latest
+    steps:              # 3️⃣ Ordered steps
+      - uses: actions/checkout@v4          # Grab code
+      - uses: actions/setup-python@v5      # Install Python
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: pytest -q
