@@ -23,5 +23,5 @@ jobs:
         run: |
           curl -X POST "$WEBHOOK_URL" \
             -H "Content-Type: application/json" \
-            -H "X-Hub-Signature: sha1=$(echo -n "$(cat events.json)" | openssl dgst -sha1 -hmac "$GH_WEBHOOK_SECRET" | sed 's/^.* //')" \
+            -H "X-Hub-Signature:-256 sha256=$(echo -n "$(cat events.json)" | openssl dgst -sha256 -hmac "$GH_WEBHOOK_SECRET" | sed 's/^.* //')" \
             --data-binary @events.json
