@@ -16,9 +16,12 @@ jobs:
       - run: python -m playwright install --with-deps chromium
       - name: Run scraper
         run: python bellingrath_events.py
-      # - name: Send to webhook
-      #   env:
-      #     WEBHOOK: ${{ secrets.WEBHOOK_URL }}
-      #   run: |
-      #     curl -X POST -H "Content-Type: application/json" \
-      #          -d @output.json "$WEBHOOK"
+      - name: Send to webhook
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          GH_WEBHOOK_SECRET: ${{ secrets.GH_WEBHOOK_SECRET }}
+        run: |
+          curl -X POST "$WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -H "X-Hub-Signature: sha1=$(echo -n "$(cat events.json)" | openssl dgst -sha1 -hmac "$GH_WEBHOOK_SECRET" | sed 's/^.* //')" \
+            --data-binary @events.json

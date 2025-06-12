@@ -103,6 +103,8 @@ async def main():
                 events.append(parse_event(res.html, res.url))
 
         print(json.dumps(events, indent=2))
+        with open("events.json", "w") as f:
+            json.dump(events, f, indent=2)
 
 if __name__ == "__main__":
     asyncio.run(main())
