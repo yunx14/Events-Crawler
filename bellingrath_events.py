@@ -47,13 +47,17 @@ def parse_event(html: str, url: str) -> dict:
 
     title         = neat_text("h1")
     datetime_blk  = neat_text("h2") or neat_text("header h2")  # covers most Tribe-Events themes
+    date  = soup.select_one(".tribe-events-start-date")
+    time = soup.select_one(".tribe-events-start-time")
     # Grab paragraphs until we hit the “Details” or “Related” headings
-    description_parts = []
-    for p in soup.select("p"):
-        if re.search(r"\bDetails\b|\bRelated\b", p.get_text(), flags=re.I):
-            break
-        description_parts.append(p.get_text(" ", strip=True))
-    description   = " ".join(description_parts).strip() or None
+    # description_parts = []
+    # for p in soup.select(".tribe-events-single-event-description p"):
+    #     if re.search(r"\bDetails\b|\bRelated\b", p.get_text(), flags=re.I):
+    #         break
+    #     description_parts.append(p.get_text(" ", strip=True))
+    # description   = " ".join(description_parts).strip() or None
+    desc_div = soup.select_one(".tribe-events-single-event-description")
+    description = desc_div.get_text(separator="\n", strip=True) or None
 
     # Tribe’s Details section is usually in <div class="tribe-events-meta-group">
     # Fallback to simple text searches if the theme is customised.
@@ -78,6 +82,8 @@ def parse_event(html: str, url: str) -> dict:
     return {
         "title": title,
         "date_time": datetime_blk,
+        "date": date.get_text(strip=True) if date else None,
+        "time": time.get_text(strip=True) if time else None,
         "description": description,
         "categories": categories,
         "organiser": organiser,
