@@ -1,5 +1,5 @@
 
-name: Bellingrath Gardens Scraper
+name: Scrapers
 on:
   schedule:
     # GitHub’s cron uses UTC → 07:00 UTC = 02:00 America/Chicago
@@ -46,4 +46,25 @@ jobs:
         env:
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
           GH_WEBHOOK_SECRET: ${{ secrets.GH_WEBHOOK_SECRET }}
+  scrape-city-of-mobile-events:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install -r requirements.txt
+      - run: python -m playwright install --with-deps chromium
+      - name: Run scraper
+        run: python city_of_mobile_events.py
+      - name: Send to webhook
+        run: |
+          curl -X POST "$WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByZ2lsaHB4ZnBheGhheHRweGZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU5MDI4MjksImV4cCI6MjA2MTQ3ODgyOX0.3aVwf-6F1vg0s2N9mc2D05xha7KDvkrOdRUS5UW4ELw" \
+            -H "X-Hub-Signature-256: sha256=$(echo -n "$(cat events.json)" | openssl dgst -sha256 -hmac "$GH_WEBHOOK_SECRET" | sed 's/^.* //')" \
+            --data-binary @events.json
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          GH_WEBHOOK_SECRET: ${{ secrets.GH_WEBHOOK_SECRET }}
+
 
