@@ -94,7 +94,7 @@ def parse_event(html: str, url: str) -> dict:
         "tickets_url": tickets_link,
         "image_url": image_url,
         "page_url": url,
-        "source_name": "Bellingrath Gardens & Home"
+        "source_name": "Bellingrath Gardens"
     }
 
 # -----------------------------------------------------------
