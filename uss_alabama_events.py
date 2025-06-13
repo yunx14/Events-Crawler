@@ -86,6 +86,7 @@ def parse_event(html: str, url: str) -> dict:
         "date": date.get_text(strip=True) if date else None,
         "time": time.get_text(strip=True) if time else None,
         "location": location.get_text(strip=True) if location else None,
+        "venue_name": location.get_text(strip=True) if location else None,
         "description": desc_div.get_text(separator="\n", strip=True) if desc_div else None,
         "categories": categories,
         "organiser": organiser,
@@ -94,6 +95,7 @@ def parse_event(html: str, url: str) -> dict:
         "tickets_url": tickets_link,
         "image_url": image_url,
         "page_url": url,
+         "source_name": "USS Alabama Battleship Memorial Park"
     }
 
 # -----------------------------------------------------------

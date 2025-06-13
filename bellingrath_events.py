@@ -84,6 +84,8 @@ def parse_event(html: str, url: str) -> dict:
         "date_time": datetime_blk,
         "date": date.get_text(strip=True) if date else None,
         "time": time.get_text(strip=True) if time else None,
+        "venue_name": "Bellingrath Gardens",
+        "location": "12401 Bellingrath Gardens Rd, Theodore, AL 36582",
         "description": description,
         "categories": categories,
         "organiser": organiser,
@@ -92,6 +94,7 @@ def parse_event(html: str, url: str) -> dict:
         "tickets_url": tickets_link,
         "image_url": image_url,
         "page_url": url,
+        "source_name": "Bellingrath Gardens & Home"
     }
 
 # -----------------------------------------------------------

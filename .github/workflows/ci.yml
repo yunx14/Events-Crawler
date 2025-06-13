@@ -1,5 +1,5 @@
 
-name: Nightly Scraper
+name: Bellingrath Gardens Scraper
 on:
   schedule:
     # GitHub’s cron uses UTC → 07:00 UTC = 02:00 America/Chicago

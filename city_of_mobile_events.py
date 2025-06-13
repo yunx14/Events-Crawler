@@ -57,10 +57,12 @@ def parse_event(html: str, url: str) -> dict:
     return {
         "title": title,
         "date_time": start_dt.get_text(strip=True) if start_dt else None,
-        "location": location.get_text(strip=True) if location else None,
+        "location": location.get_text(" ", strip=True) if location else None,
+        "venue_name": location.get_text(" ", strip=True) if location else None,
         "description": description,
         "image_url": image_url,
-        "url": url,
+        "page_url": url,
+        "source_name": "City of Mobile"
     }
 
 # -----------------------------------------------------------
